@@ -1,16 +1,17 @@
+
 /// @file main.cpp
 /// @brief The Arcade menu
 
 #include <iostream>
 #include <string>
-
-#include "blackjack.h"
-#include "dungeon.h"
-#include "hangman.h"
+#include "blackjack_game.h"
+#include "dungeon_game.h"
+#include "hangman_game.h"
 #include "input.h"
-#include "minesweeper.h"
+#include "minesweeper_game.h"
 
 namespace {
+
 enum class Choice { hangman, dungeon, blackjack, minesweeper, quit, invalid };
 
 void print_menu() {
@@ -22,7 +23,9 @@ void print_menu() {
             << "0. Quit\n";
 }
 
-void report_score(int score) { std::cout << "Score: " << score << "\n"; }
+void report_score(int score) {
+  std::cout << "Score: " << score << "\n";
+}
 
 Choice parse_choice(const std::string &text) {
   if (text == "1") {
@@ -46,36 +49,56 @@ Choice parse_choice(const std::string &text) {
 } // namespace
 
 int main() {
+  Hangman hangman;
+  Dungeon dungeon;
+  Blackjack blackjack;
+  Minesweeper minesweeper;
+
   std::string line;
+
   while (true) {
     print_menu();
+
     if (!prompt_line("Choose: ", line)) {
-      break; // input ended
+      break;
     }
+
     const Choice choice{parse_choice(line)};
+
     if (choice == Choice::quit) {
       break;
     }
+
     switch (choice) {
     case Choice::hangman:
-      report_score(play_hangman());
+      hangman.play();
+      report_score(hangman.last_score());
       break;
+
     case Choice::dungeon:
-      report_score(play_dungeon());
+      dungeon.play();
+      report_score(dungeon.last_score());
       break;
+
     case Choice::blackjack:
-      report_score(play_blackjack());
+      blackjack.play();
+      report_score(blackjack.last_score());
       break;
+
     case Choice::minesweeper:
-      report_score(play_minesweeper());
+      minesweeper.play();
+      report_score(minesweeper.last_score());
       break;
+
     case Choice::quit:
       break;
+
     case Choice::invalid:
       std::cout << "Please enter 1-4, or 0 to quit.\n";
       break;
     }
   }
+
   std::cout << "Goodbye.\n";
   return 0;
 }

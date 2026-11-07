@@ -20,6 +20,8 @@ if(ENABLE_ASAN)
 endif()
 
 add_library(arcade_lib STATIC
+    src/dungeon_game.cpp
+    src/blackjack_game.cpp
     src/hangman_game.cpp
     src/minesweeper_game.cpp
     src/game.cpp
